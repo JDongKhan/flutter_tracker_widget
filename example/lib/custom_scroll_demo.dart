@@ -20,8 +20,7 @@ class CustomScrollDemo extends StatelessWidget {
         title: Text('Custom Scroll Demo'),
       ),
       body: TrackerScrollWidget(
-        initialInViewIds: ['first'],
-        isInViewPortCondition: (
+        hitViewPortCondition: (
           double deltaTop,
           double deltaBottom,
           double viewPortDimension,
@@ -115,6 +114,6 @@ class CustomScrollDemo extends StatelessWidget {
     bool visiable,
     String id,
   ) {
-    print('id:$id - visiable:$visiable');
+    print('开始曝光了 { id:$id - visiable:$visiable }');
   }
 }

@@ -13,28 +13,18 @@ class TrackerScrollWidget extends StatefulWidget {
   TrackerScrollWidget({
     Key? key,
     required this.child,
-    this.initialInViewIds = const [],
-    this.endNotificationOffset = 0.0,
-    this.onListEndReached,
+    this.initHitIds = const [],
     this.throttleDuration = const Duration(milliseconds: 200),
-    required this.isInViewPortCondition,
-  })   : assert(endNotificationOffset >= 0.0),
-        scrollDirection = child.scrollDirection,
+    required this.hitViewPortCondition,
+  })   : scrollDirection = child.scrollDirection,
         super(key: key);
 
   ///The String list of ids of the child widgets that should be initialized as inView
   ///when the list view is built for the first time.
-  final List<String> initialInViewIds;
+  final List<String> initHitIds;
 
   ///The widget that should be displayed in the [InViewNotifier].
   final ScrollView child;
-
-  ///The distance from the bottom of the list where the [onListEndReached] should be invoked.
-  final double endNotificationOffset;
-
-  ///The function that is invoked when the list scroll reaches the end
-  ///or the [endNotificationOffset] if provided.
-  final VoidCallback? onListEndReached;
 
   ///The duration to be used for throttling the scroll notification.
   ///Defaults to 200 milliseconds.
@@ -45,14 +35,14 @@ class TrackerScrollWidget extends StatefulWidget {
 
   ///The function that defines the area within which the widgets should be notified
   ///as inView.
-  final IsInViewPortCondition isInViewPortCondition;
+  final HitViewPortCondition hitViewPortCondition;
 
   @override
   _TrackerScrollWidgetState createState() => _TrackerScrollWidgetState();
 }
 
 class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
-  TrackerState? _inViewState;
+  TrackerState? _trackerState;
   StreamController<ScrollNotification>? _streamController;
 
   @override
@@ -76,8 +66,8 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
 
   @override
   void dispose() {
-    _inViewState?.dispose();
-    _inViewState = null;
+    _trackerState?.dispose();
+    _trackerState = null;
     _streamController?.close();
     super.dispose();
   }
@@ -86,40 +76,28 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
     _streamController = StreamController<ScrollNotification>();
     _streamController!.stream
         .audit(widget.throttleDuration)
-        .listen(_inViewState!.onScroll);
+        .listen(_trackerState!.onScroll);
   }
 
   void _initializeInViewState() {
-    _inViewState = TrackerState(
-      intialIds: widget.initialInViewIds,
-      isInViewCondition: widget.isInViewPortCondition,
+    _trackerState = TrackerState(
+      initHitIds: widget.initHitIds,
+      hitViewPortCondition: widget.hitViewPortCondition,
     );
   }
 
   bool _onScroll(ScrollNotification notification) {
     late bool isScrollDirection;
     //the direction of user scroll up, down, left, right.
-    final AxisDirection scrollDirection = notification.metrics.axisDirection;
+    final Axis scrollDirection = notification.metrics.axis;
     // print('scrollDirection:${notification.metrics}');
     switch (widget.scrollDirection) {
       case Axis.vertical:
-        isScrollDirection = scrollDirection == AxisDirection.down ||
-            scrollDirection == AxisDirection.up;
+        isScrollDirection = scrollDirection == Axis.vertical;
         break;
       case Axis.horizontal:
-        isScrollDirection = scrollDirection == AxisDirection.left ||
-            scrollDirection == AxisDirection.right;
+        isScrollDirection = scrollDirection == Axis.horizontal;
         break;
-    }
-    final double maxScroll = notification.metrics.maxScrollExtent;
-
-    //end of the listview reached
-    if (isScrollDirection &&
-        maxScroll - notification.metrics.pixels <=
-            widget.endNotificationOffset) {
-      if (widget.onListEndReached != null) {
-        widget.onListEndReached!();
-      }
     }
 
     //when user is not scrolling
@@ -148,9 +126,9 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         ///viewport的高度
-        _inViewState!.vpHeight = constraints.maxHeight;
+        _trackerState!.vpHeight = constraints.maxHeight;
         return TrackerInheritedWidget(
-          inViewState: _inViewState,
+          inViewState: _trackerState,
           child: NotificationListener<ScrollNotification>(
             child: widget.child,
             onNotification: _onScroll,
@@ -163,7 +141,7 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
 
 ///The function that defines the area within which the widgets should be notified
 ///as inView.
-typedef bool IsInViewPortCondition(
+typedef bool HitViewPortCondition(
   double deltaTop,
   double deltaBottom,
   double viewPortDimension,

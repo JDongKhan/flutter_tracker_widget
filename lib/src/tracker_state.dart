@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import 'tracker_scroll_widget.dart';
@@ -8,11 +9,11 @@ import 'tracker_scroll_widget.dart';
 
 class TrackerState extends ChangeNotifier {
   TrackerState({
-    required List<String> intialIds,
-    bool Function(double, double, double)? isInViewCondition,
-  }) : _isInViewCondition = isInViewCondition {
+    required List<String> initHitIds,
+    bool Function(double, double, double)? hitViewPortCondition,
+  }) : _hitViewPortCondition = hitViewPortCondition {
     _contexts = Set<WidgetData>();
-    _currentInViewIds.addAll(intialIds);
+    _currentInViewIds.addAll(initHitIds);
   }
 
   ///当前在widget tree上对应的context
@@ -25,7 +26,7 @@ class TrackerState extends ChangeNotifier {
   List<String> _currentInViewIds = [];
 
   ///条件
-  final IsInViewPortCondition? _isInViewCondition;
+  final HitViewPortCondition? _hitViewPortCondition;
 
   //已经显示的 ids
   List<String> _displayedIds = [];
@@ -57,7 +58,9 @@ class TrackerState extends ChangeNotifier {
   }
 
   ///首次渲染处理逻辑，跟滚动有所区别
-  void _handleFirstRender(WidgetData item) {
+  void _handleFirstRender(WidgetData item) async {
+    //等待帧渲染结束
+    await SchedulerBinding.instance!.endOfFrame;
     // Retrieve the RenderObject, linked to a specific item
     final RenderObject? renderObject = item.context!.findRenderObject();
     // If none was to be found, or if not attached, leave by now
@@ -158,7 +161,7 @@ class TrackerState extends ChangeNotifier {
   ///处理in view逻辑
   void _handleInView(WidgetData item, double deltaTop, double deltaBottom,
       double viewPortDimension, Function refreshFuncation) {
-    bool isInViewport = _isInViewCondition!(deltaTop, deltaBottom, vpHeight);
+    bool isInViewport = _hitViewPortCondition!(deltaTop, deltaBottom, vpHeight);
     if (isInViewport) {
       if (!_currentInViewIds.contains(item.id)) {
         _currentInViewIds.add(item.id);

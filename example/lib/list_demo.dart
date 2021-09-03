@@ -21,8 +21,8 @@ class ListDemo extends StatelessWidget {
         title: Text('List Demo'),
       ),
       body: TrackerScrollWidget(
-        initialInViewIds: ['0'],
-        isInViewPortCondition: (
+        initHitIds: ['0'],
+        hitViewPortCondition: (
           double deltaTop,
           double deltaBottom,
           double viewPortDimension,
@@ -43,6 +43,7 @@ class ListDemo extends StatelessWidget {
       itemBuilder: (c, index) {
         return TrackerItemWidget(
           id: '$index',
+          trackerStrategy: TrackerStrategy.every,
           child: Container(
             height: 200,
             color: _colors[index % 7],
@@ -58,7 +59,7 @@ class ListDemo extends StatelessWidget {
             bool visiable,
             String id,
           ) {
-            print('id:$id - index:$index - visiable:$visiable');
+            print('开始曝光了 { id:$id - index:$index - visiable:$visiable }');
           },
           builder: (
             BuildContext context,

@@ -58,7 +58,7 @@ TrackerScrollWidget(
                   bool visiable,
                   String id,
                 ) {
-                  print('id:$id - index:$index - visiable:$visiable');
+                  print('开始曝光了 { id:$id - index:$index - visiable:$visiable }');
                 },
                 builder: (
                   BuildContext context,
@@ -89,11 +89,10 @@ TrackerScrollWidget(
 ![demo png](https://github.com/JDongKhan/flutter_tracker_widget/blob/main/1.gif)
 
 
-借鉴于:**inview_notifier_list**,做了大量修改
+
+**主要功能:**
 
 
-
-**不同的地方：**
 
 1、在滚动结束才处理cell可见的逻辑，避免滚动中影响性能
 
@@ -114,15 +113,63 @@ enum TrackerStrategy {
 
 ```
 
+TrackerStrategy.only下，曝光不会重复
+
+```shell
+
+flutter: 开始曝光了 { id:first - visiable:true }
+flutter: 开始曝光了 { id:second - visiable:true }
+flutter: 开始曝光了 { id:0 - visiable:true }
+flutter: 开始曝光了 { id:1 - visiable:true }
+flutter: 开始曝光了 { id:2 - visiable:true }
+flutter: 开始曝光了 { id:3 - visiable:true }
+flutter: 开始曝光了 { id:5 - visiable:true }
+flutter: 开始曝光了 { id:6 - visiable:true }
+flutter: 开始曝光了 { id:7 - visiable:true }
+flutter: 开始曝光了 { id:8 - visiable:true }
+flutter: 开始曝光了 { id:9 - visiable:true }
+flutter: 开始曝光了 { id:4 - visiable:true }
+```
+
+TrackerStrategy.evey下，曝光会重复
+
+```
+flutter: 开始曝光了 { id:0 - index:0 - visiable:true }
+flutter: 开始曝光了 { id:1 - index:1 - visiable:true }
+flutter: 开始曝光了 { id:2 - index:2 - visiable:true }
+flutter: 开始曝光了 { id:3 - index:3 - visiable:true }
+flutter: 开始曝光了 { id:4 - index:4 - visiable:true }
+flutter: 开始曝光了 { id:5 - index:5 - visiable:true }
+flutter: 开始曝光了 { id:0 - index:0 - visiable:true }
+
+```
 
 
-3、首次进入也会走曝光和inview逻辑
+
+3、首次进入也会走曝光和hit逻辑
 
 
 
-4、更合理的释放机制
+如果想指定首次命中的view，可以使用initHitIds将指定的id传入
 
 
 
-5、优化inview_notifier_list逻辑
+```
+比如：initHitIds: ['0'],
+```
 
+
+
+不传，默认会调用hitViewPortCondition去计算命中的view
+
+
+
+4、方便获取visibleContexts
+
+
+
+底层维护一个context的list，便于获取scrollview中可见的RenderObject
+
+
+
+5、更合理的释放机制

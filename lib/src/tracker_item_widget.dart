@@ -37,9 +37,7 @@ class _TrackerItemWidgetState extends State<TrackerItemWidget> {
   @override
   void dispose() {
     ///context都没了，也没有必要保留了
-    if (_state != null) {
-      _state!.removeContext(widget.id);
-    }
+    _state!.removeContext(widget.id);
     super.dispose();
   }
 
