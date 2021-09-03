@@ -1,4 +1,4 @@
-# flutter_tracker_wdiget
+# flutter_tracker_widget
 
 这是一个支持滚动播放和合理曝光的组件
 
@@ -7,7 +7,7 @@
 1、pubspec.yaml 
 
 ```dart
-flutter_tracker_wdiget: any
+flutter_tracker_widget: any
 ```
 
 
@@ -23,7 +23,7 @@ flutter pub get
 3、import
 
 ```dart
-import 'package:tracker_scroll_wdiget/tracker_scroll_widget.dart'
+import 'package:flutter_tracker_widget/flutter_tracker_widget.dart'
 ```
 
 
@@ -86,7 +86,7 @@ TrackerScrollWidget(
 
 
 
-![demo png](https://github.com/JDongKhan/flutter_tracker_wdiget/blob/main/1.gif)
+![demo png](https://github.com/JDongKhan/flutter_tracker_widget/blob/main/1.gif)
 
 
 借鉴于:**inview_notifier_list**,做了大量修改
