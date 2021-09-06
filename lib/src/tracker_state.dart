@@ -34,12 +34,15 @@ class TrackerState extends ChangeNotifier {
   ///in-view 数量
   int get inViewWidgetIdsLength => _currentInViewIds.length;
 
-  ///tree上context的数据
+  ///element tree上context的数据
   int get numberOfContext => _contexts.length;
 
   ///可见的组件
   List<BuildContext?> get visibleContexts =>
       _contexts.where((e) => e.visible).map((e) => e.context).toList();
+
+  List<String?> get visibleIndexs =>
+      _contexts.where((e) => e.visible).map((e) => e.id).toList();
 
   ///Add the widget's context and an unique string id that needs to be notified.
   void addContext(WidgetData item) {
@@ -152,7 +155,7 @@ class TrackerState extends ChangeNotifier {
       if (!_displayedIds.contains(item.id)) {
         _displayedIds.add(item.id);
         if (item.displayNotifier != null) {
-          item.displayNotifier!(item.context!, true, item.id);
+          item.displayNotifier!(item.context!, item.id);
         }
       }
     }
@@ -165,16 +168,12 @@ class TrackerState extends ChangeNotifier {
     if (isInViewport) {
       if (!_currentInViewIds.contains(item.id)) {
         _currentInViewIds.add(item.id);
-        if (refreshFuncation != null) {
-          refreshFuncation();
-        }
+        refreshFuncation();
       }
     } else {
       if (_currentInViewIds.contains(item.id)) {
         _currentInViewIds.remove(item.id);
-        if (refreshFuncation != null) {
-          refreshFuncation();
-        }
+        refreshFuncation();
       }
     }
   }
@@ -182,7 +181,6 @@ class TrackerState extends ChangeNotifier {
 
 typedef void DisplayNotifier(
   BuildContext context,
-  bool display,
   String id,
 );
 

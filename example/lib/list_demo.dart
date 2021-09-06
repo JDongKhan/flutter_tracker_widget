@@ -56,10 +56,9 @@ class ListDemo extends StatelessWidget {
           ),
           displayNotifier: (
             BuildContext context,
-            bool visiable,
             String id,
           ) {
-            print('开始曝光了 { id:$id - index:$index - visiable:$visiable }');
+            print('开始曝光了 { id:$id - index:$index }');
           },
           builder: (
             BuildContext context,

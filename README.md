@@ -55,10 +55,9 @@ TrackerScrollWidget(
                 ),
                 displayNotifier: (
                   BuildContext context,
-                  bool visiable,
                   String id,
                 ) {
-                  print('开始曝光了 { id:$id - index:$index - visiable:$visiable }');
+                  print('开始曝光了 { id:$id - index:$index }');
                 },
                 builder: (
                   BuildContext context,
@@ -131,7 +130,7 @@ flutter: 开始曝光了 { id:9 - visiable:true }
 flutter: 开始曝光了 { id:4 - visiable:true }
 ```
 
-TrackerStrategy.evey下，曝光会重复
+TrackerStrategy.every下，曝光会重复
 
 ```
 flutter: 开始曝光了 { id:0 - index:0 - visiable:true }

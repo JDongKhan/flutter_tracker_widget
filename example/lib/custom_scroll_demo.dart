@@ -111,9 +111,8 @@ class CustomScrollDemo extends StatelessWidget {
   ///曝光
   void _displayNotifier(
     BuildContext context,
-    bool visiable,
     String id,
   ) {
-    print('开始曝光了 { id:$id - visiable:$visiable }');
+    print('开始曝光了 { id:$id }');
   }
 }
