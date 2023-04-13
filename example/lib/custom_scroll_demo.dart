@@ -20,16 +20,20 @@ class CustomScrollDemo extends StatelessWidget {
         title: Text('Custom Scroll Demo'),
       ),
       body: TrackerScrollWidget(
-        hitViewPortCondition: (
-          double deltaTop,
-          double deltaBottom,
-          double viewPortDimension,
-        ) {
-          // print('deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
-          ///判断是否出于中间
-          return deltaTop < (0.5 * viewPortDimension) &&
-              deltaBottom > (0.5 * viewPortDimension);
-        },
+        // hitViewPortCondition: (
+        //   double deltaTop,
+        //   double deltaBottom,
+        //   double viewPortDimension,
+        // ) {
+        //   print(
+        //       'deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
+        //   return deltaTop < (0.5 * viewPortDimension) &&
+        //       deltaBottom > (0.5 * viewPortDimension);
+        //
+        //   ///判断是否出于中间
+        //   // return deltaTop < (0.5 * viewPortDimension) &&
+        //   //     deltaBottom > (0.5 * viewPortDimension);
+        // },
         child: _customScrollView(),
       ),
     );
@@ -67,6 +71,52 @@ class CustomScrollDemo extends StatelessWidget {
             ),
           ),
         ),
+        TrackerItemWidget(
+          id: 'third',
+          sliver: true,
+          displayNotifier: _displayNotifier,
+          child: SliverToBoxAdapter(
+            child: Text('我比较特殊'),
+          ),
+        ),
+        TrackerItemWidget(
+          id: 'forth',
+          sliver: true,
+          displayNotifier: _displayNotifier,
+          child: SliverToBoxAdapter(
+            child: Container(
+              height: 1000,
+              alignment: Alignment.center,
+              color: Colors.green,
+              child: Text('我变高后会占用别人曝光的机会'),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 100,
+            child: TrackerScrollWidget(
+              id: 'fifth',
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (c, idx) {
+                  return TrackerItemWidget(
+                    id: 'list_$idx',
+                    key: UniqueKey(),
+                    displayNotifier: (c, id) {
+                      print('开始曝光了 horizontal { id:$id }');
+                    },
+                    child: Container(
+                      width: 100,
+                      child: Center(child: Text('$idx')),
+                    ),
+                  );
+                },
+                itemCount: 20,
+              ),
+            ),
+          ),
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             return TrackerItemWidget(
@@ -84,7 +134,7 @@ class CustomScrollDemo extends StatelessWidget {
                 ),
               ),
             );
-          }, childCount: 10),
+          }, childCount: 100),
         ),
       ],
     );

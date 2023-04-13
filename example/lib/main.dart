@@ -2,6 +2,8 @@ import 'package:example/custom_scroll_demo.dart';
 import 'package:example/list_demo.dart';
 import 'package:flutter/material.dart';
 
+import 'horizontal_list.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -93,6 +95,16 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             child: Text('CustomScroll Demo'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => HorizontalList(),
+                ),
+              );
+            },
+            child: Text('Horizontal List Demo'),
           ),
         ],
       ),

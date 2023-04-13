@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tracker_widget/flutter_tracker_widget.dart';
 
-/// @author jd
+///@Description TODO
+///@Author jd
+class HorizontalList extends StatelessWidget {
+  HorizontalList({Key key}) : super(key: key);
 
-class ListDemo extends StatelessWidget {
   List<Color> _colors = [
     Colors.red,
     Colors.orange,
@@ -29,7 +31,8 @@ class ListDemo extends StatelessWidget {
         ) {
           ///判断是否出于中间
           // print('deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
-          return deltaTop < 100 && deltaBottom > 100;
+          return deltaTop < (0.5 * viewPortDimension) &&
+              deltaBottom > (0.5 * viewPortDimension);
         },
         child: _listWidget(),
       ),
@@ -39,12 +42,14 @@ class ListDemo extends StatelessWidget {
   ///list demo
   Widget _listWidget() {
     return ListView.builder(
+      scrollDirection: Axis.horizontal,
       itemBuilder: (c, index) {
         return TrackerItemWidget(
           id: '$index',
-          // trackerStrategy: TrackerStrategy.every,
+          trackerStrategy: TrackerStrategy.every,
           child: Container(
-            height: 200,
+            height: 100,
+            width: 50,
             color: _colors[index % 7],
             child: Center(
               child: Text(

@@ -9,10 +9,21 @@ class TrackerInheritedWidget extends InheritedWidget {
 
   ///获取TrackerState，便于你获取里面的数据
   static TrackerState? of(BuildContext context) {
-    final TrackerInheritedWidget widget = context
-        .getElementForInheritedWidgetOfExactType<TrackerInheritedWidget>()!
-        .widget as TrackerInheritedWidget;
-    return widget.inViewState;
+    final Widget? widget = context
+        .getElementForInheritedWidgetOfExactType<TrackerInheritedWidget>()
+        ?.widget;
+    if (widget != null) {
+      TrackerInheritedWidget inheritedWidget = widget as TrackerInheritedWidget;
+      return inheritedWidget.inViewState;
+    }
+    return null;
+  }
+
+  ///获取TrackerState，便于你获取里面的数据
+  static TrackerState? root(BuildContext context) {
+    final TrackerInheritedWidget? widget =
+        context.findAncestorWidgetOfExactType<TrackerInheritedWidget>();
+    return widget?.inViewState;
   }
 
   //获取可见的context数组
