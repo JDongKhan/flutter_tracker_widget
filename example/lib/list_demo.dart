@@ -4,15 +4,7 @@ import 'package:flutter_tracker_widget/flutter_tracker_widget.dart';
 /// @author jd
 
 class ListDemo extends StatelessWidget {
-  List<Color> _colors = [
-    Colors.red,
-    Colors.orange,
-    Colors.yellow,
-    Colors.green,
-    Colors.cyan,
-    Colors.blue,
-    Colors.purple
-  ];
+  List<Color> _colors = [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.cyan, Colors.blue, Colors.purple];
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +29,7 @@ class ListDemo extends StatelessWidget {
   }
 
   ///list demo
-  Widget _listWidget() {
+  ScrollView _listWidget() {
     return ListView.builder(
       itemBuilder: (c, index) {
         return TrackerItemWidget(
@@ -62,10 +54,10 @@ class ListDemo extends StatelessWidget {
           builder: (
             BuildContext context,
             bool isInView,
-            Widget child,
+            Widget? child,
           ) {
             return Stack(children: [
-              child,
+              child!,
               Positioned(
                 right: 0,
                 top: 0,

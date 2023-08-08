@@ -3,15 +3,7 @@ import 'package:flutter_tracker_widget/flutter_tracker_widget.dart';
 
 /// @author jd
 class CustomScrollDemo extends StatelessWidget {
-  List<Color> _colors = [
-    Colors.red,
-    Colors.orange,
-    Colors.yellow,
-    Colors.green,
-    Colors.cyan,
-    Colors.blue,
-    Colors.purple
-  ];
+  List<Color> _colors = [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.cyan, Colors.blue, Colors.purple];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +32,7 @@ class CustomScrollDemo extends StatelessWidget {
   }
 
   ///customscroll demo
-  Widget _customScrollView() {
+  ScrollView _customScrollView() {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -143,10 +135,10 @@ class CustomScrollDemo extends StatelessWidget {
   Widget _inView(
     BuildContext context,
     bool isInView,
-    Widget child,
+    Widget? child,
   ) {
     return Stack(children: [
-      child,
+      child!,
       Positioned(
         right: 0,
         top: 0,

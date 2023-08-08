@@ -4,17 +4,9 @@ import 'package:flutter_tracker_widget/flutter_tracker_widget.dart';
 ///@Description TODO
 ///@Author jd
 class HorizontalList extends StatelessWidget {
-  HorizontalList({Key key}) : super(key: key);
+  HorizontalList({Key? key}) : super(key: key);
 
-  List<Color> _colors = [
-    Colors.red,
-    Colors.orange,
-    Colors.yellow,
-    Colors.green,
-    Colors.cyan,
-    Colors.blue,
-    Colors.purple
-  ];
+  List<Color> _colors = [Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.cyan, Colors.blue, Colors.purple];
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +23,7 @@ class HorizontalList extends StatelessWidget {
         ) {
           ///判断是否出于中间
           // print('deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
-          return deltaTop < (0.5 * viewPortDimension) &&
-              deltaBottom > (0.5 * viewPortDimension);
+          return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
         },
         child: _listWidget(),
       ),
@@ -40,7 +31,7 @@ class HorizontalList extends StatelessWidget {
   }
 
   ///list demo
-  Widget _listWidget() {
+  ScrollView _listWidget() {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemBuilder: (c, index) {
@@ -67,10 +58,10 @@ class HorizontalList extends StatelessWidget {
           builder: (
             BuildContext context,
             bool isInView,
-            Widget child,
+            Widget? child,
           ) {
             return Stack(children: [
-              child,
+              child!,
               Positioned(
                 right: 0,
                 top: 0,
