@@ -16,11 +16,7 @@ class HorizontalList extends StatelessWidget {
       ),
       body: TrackerScrollWidget(
         initHitIds: ['0'],
-        hitViewPortCondition: (
-          double deltaTop,
-          double deltaBottom,
-          double viewPortDimension,
-        ) {
+        hitViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
           ///判断是否出于中间
           // print('deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
           return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
@@ -49,28 +45,23 @@ class HorizontalList extends StatelessWidget {
               ),
             ),
           ),
-          displayNotifier: (
-            BuildContext context,
-            String id,
-          ) {
+          displayNotifier: (BuildContext context, String id) {
             print('开始曝光了 { id:$id - index:$index }');
           },
-          builder: (
-            BuildContext context,
-            bool isInView,
-            Widget? child,
-          ) {
-            return Stack(children: [
-              child!,
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Text(
-                  isInView ? '显示' : '',
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ]);
+          builder: (BuildContext context, bool isInView, Widget? child) {
+            return Stack(
+              children: [
+                child!,
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Text(
+                    isInView ? '显示' : '',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              ],
+            );
           },
         );
       },

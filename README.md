@@ -32,7 +32,6 @@ import 'package:flutter_tracker_widget/flutter_tracker_widget.dart'
 
 ```dart
 TrackerScrollWidget(
-          initialInViewIds: ['0'],
           isInViewPortCondition: (
             double deltaTop,
             double deltaBottom,

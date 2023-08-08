@@ -17,18 +17,21 @@ class TrackerItemWidget extends StatefulWidget {
     this.sliver = false,
   }) : super(key: key);
 
+  // different with key
   final String id;
 
   final InViewNotifierWidgetBuilder? builder;
 
+  //strategy
   final TrackerStrategy trackerStrategy;
 
+  //callback
   final DisplayNotifier? displayNotifier;
 
   ///The child widget to pass to the builder.
   final Widget? child;
 
-  ///child是否是sliver
+  ///child whether is sliver
   final bool sliver;
 
   @override
@@ -70,8 +73,7 @@ class _TrackerItemWidgetState extends State<TrackerItemWidget> {
         if (child != null) {
           return child;
         }
-        assert(child != null || widget.builder != null,
-            'child == null && widget.builder == null');
+        assert(child != null || widget.builder != null, 'child == null && widget.builder == null');
         return Container();
       },
     );

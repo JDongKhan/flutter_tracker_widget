@@ -12,20 +12,14 @@ class CustomScrollDemo extends StatelessWidget {
         title: Text('Custom Scroll Demo'),
       ),
       body: TrackerScrollWidget(
-        // hitViewPortCondition: (
-        //   double deltaTop,
-        //   double deltaBottom,
-        //   double viewPortDimension,
-        // ) {
-        //   print(
-        //       'deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
-        //   return deltaTop < (0.5 * viewPortDimension) &&
-        //       deltaBottom > (0.5 * viewPortDimension);
-        //
-        //   ///判断是否出于中间
-        //   // return deltaTop < (0.5 * viewPortDimension) &&
-        //   //     deltaBottom > (0.5 * viewPortDimension);
-        // },
+        hitViewPortCondition: (double deltaTop, double deltaBottom, double viewPortDimension) {
+          print('deltaTop:$deltaTop - deltaBottom:$deltaBottom - viewPortDimension:$viewPortDimension');
+          return deltaTop < (0.5 * viewPortDimension) && deltaBottom > (0.5 * viewPortDimension);
+
+          ///判断是否出于中间
+          // return deltaTop < (0.5 * viewPortDimension) &&
+          //     deltaBottom > (0.5 * viewPortDimension);
+        },
         child: _customScrollView(),
       ),
     );
@@ -94,6 +88,7 @@ class CustomScrollDemo extends StatelessWidget {
                 itemBuilder: (c, idx) {
                   return TrackerItemWidget(
                     id: 'list_$idx',
+                    builder: _inView,
                     key: UniqueKey(),
                     displayNotifier: (c, id) {
                       print('开始曝光了 horizontal { id:$id }');
@@ -110,51 +105,49 @@ class CustomScrollDemo extends StatelessWidget {
           ),
         ),
         SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return TrackerItemWidget(
-              id: '$index',
-              builder: _inView,
-              displayNotifier: _displayNotifier,
-              child: Container(
-                height: 200,
-                color: _colors[index % 7],
-                child: Center(
-                  child: Text(
-                    '$index',
-                    style: TextStyle(color: Colors.white),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return TrackerItemWidget(
+                id: '$index',
+                builder: _inView,
+                displayNotifier: _displayNotifier,
+                child: Container(
+                  height: 200,
+                  color: _colors[index % 7],
+                  child: Center(
+                    child: Text(
+                      '$index',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            );
-          }, childCount: 100),
+              );
+            },
+            childCount: 100,
+          ),
         ),
       ],
     );
   }
 
-  Widget _inView(
-    BuildContext context,
-    bool isInView,
-    Widget? child,
-  ) {
-    return Stack(children: [
-      child!,
-      Positioned(
-        right: 0,
-        top: 0,
-        child: Text(
-          isInView ? '显示' : '',
-          style: TextStyle(color: Colors.white),
-        ),
-      )
-    ]);
+  Widget _inView(BuildContext context, bool isInView, Widget? child) {
+    return Stack(
+      children: [
+        child!,
+        Positioned(
+          right: 0,
+          top: 0,
+          child: Text(
+            isInView ? '显示' : '',
+            style: TextStyle(color: Colors.white),
+          ),
+        )
+      ],
+    );
   }
 
   ///曝光
-  void _displayNotifier(
-    BuildContext context,
-    String id,
-  ) {
+  void _displayNotifier(BuildContext context, String id) {
     print('开始曝光了 { id:$id }');
   }
 }

@@ -48,11 +48,9 @@ class TrackerState extends ChangeNotifier {
   int get numberOfContext => _contexts.length;
 
   ///可见的组件
-  List<BuildContext?> get visibleContexts =>
-      _contexts.where((e) => e.visible).map((e) => e.context).toList();
+  List<BuildContext?> get visibleContexts => _contexts.where((e) => e.visible).map((e) => e.context).toList();
 
-  List<String?> get visibleIndexs =>
-      _contexts.where((e) => e.visible).map((e) => e.id).toList();
+  List<String?> get visibleIndexs => _contexts.where((e) => e.visible).map((e) => e.id).toList();
 
   void _setParentState(TrackerState state, BuildContext context) {
     _parentState = state;
@@ -74,9 +72,10 @@ class TrackerState extends ChangeNotifier {
     _contexts.removeWhere((d) => d.id == id);
   }
 
-  void clearDisplay(){
+  void clearDisplay() {
     _displayedIds.clear();
   }
+
   ///Checks if the widget with the `id` is currently in-view or not.
   bool inView(String id) {
     return _currentInViewIds.contains(id);
@@ -88,11 +87,8 @@ class TrackerState extends ChangeNotifier {
     bool ignoreParent = false,
   }) async {
     //等待帧渲染结束
-    SchedulerBinding? binding = SchedulerBinding.instance;
-    if (binding != null) {
-      await binding.endOfFrame;
-    }
-
+    SchedulerBinding binding = SchedulerBinding.instance;
+    await binding.endOfFrame;
     //因为是异步读取，可能widget已经从组件树上移除了
     if (!item.state.mounted) {
       debugPrint('组件${item.id}已释放');
@@ -100,10 +96,7 @@ class TrackerState extends ChangeNotifier {
     }
 
     //判断有没有在父state里面超出
-    if (!ignoreParent &&
-        _parentContext != null &&
-        _parentState != null &&
-        !_parentState!._isInsideParentView(_parentContext!)) {
+    if (!ignoreParent && _parentContext != null && _parentState != null && !_parentState!._isInsideParentView(_parentContext!)) {
       return;
     }
     double viewportDimension = vpHeight;
@@ -133,8 +126,7 @@ class TrackerState extends ChangeNotifier {
     // whether it is in the viewport
     _contexts.forEach((WidgetContextData item) {
       double viewportDimension = notification.metrics.viewportDimension;
-      if (_calculateOffset(
-          item, viewportDimension, notification.metrics.pixels)) {
+      if (_calculateOffset(item, viewportDimension, notification.metrics.pixels)) {
         ///处理display逻辑
         _handleDisplay(item, viewportDimension);
 
@@ -149,8 +141,7 @@ class TrackerState extends ChangeNotifier {
   }
 
   ///计算偏移
-  bool _calculateOffset(
-      WidgetContextData item, double viewportDimension, double scrollOffset) {
+  bool _calculateOffset(WidgetContextData item, double viewportDimension, double scrollOffset) {
     // Retrieve the RenderObject, linked to a specific item
     BuildContext c = item.context;
     final RenderObject? renderObject = c.findRenderObject();
@@ -161,10 +152,8 @@ class TrackerState extends ChangeNotifier {
     }
 
     //Retrieve the viewport related to the scroll area
-    final RenderAbstractViewport viewport =
-        RenderAbstractViewport.of(renderObject)!;
-    final RevealedOffset vpOffset =
-        viewport.getOffsetToReveal(renderObject, 0.0);
+    final RenderAbstractViewport viewport = RenderAbstractViewport.of(renderObject);
+    final RevealedOffset vpOffset = viewport.getOffsetToReveal(renderObject, 0.0);
 
     final Size size = renderObject.semanticBounds.size;
     //相对于窗口的偏移量
@@ -189,10 +178,8 @@ class TrackerState extends ChangeNotifier {
     if (renderObject == null || !renderObject.attached) {
       return false;
     }
-    final RenderAbstractViewport viewport =
-        RenderAbstractViewport.of(renderObject)!;
-    final RevealedOffset vpOffset =
-        viewport.getOffsetToReveal(renderObject, 0.0);
+    final RenderAbstractViewport viewport = RenderAbstractViewport.of(renderObject);
+    final RevealedOffset vpOffset = viewport.getOffsetToReveal(renderObject, 0.0);
 
     // Retrieve the dimensions of the item
     final Size size = renderObject.semanticBounds.size;
@@ -244,11 +231,8 @@ class TrackerState extends ChangeNotifier {
   }
 
   ///处理in view逻辑
-  void _handleInView(WidgetContextData item, double viewPortDimension,
-      Function refreshFunction) {
-    bool isInViewport = _hitViewPortCondition?.call(
-            item.offset, item.offsetEnd, viewPortDimension) ??
-        false;
+  void _handleInView(WidgetContextData item, double viewPortDimension, Function refreshFunction) {
+    bool isInViewport = _hitViewPortCondition?.call(item.offset, item.offsetEnd, viewPortDimension) ?? false;
     if (isInViewport) {
       if (!_currentInViewIds.contains(item.id)) {
         _currentInViewIds.add(item.id);
