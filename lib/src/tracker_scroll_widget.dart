@@ -9,7 +9,7 @@ import 'tracker_inherited_widget.dart';
 import 'tracker_state.dart';
 
 enum ScrollStrategy {
-  all,
+  scroll,
   end,
 }
 
@@ -77,9 +77,7 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
   ///监听滚动
   void _startListening() {
     _streamController = StreamController<ScrollNotification>();
-    _streamController!.stream
-        .audit(widget.throttleDuration)
-        .listen(_trackerState!.onScroll);
+    _streamController!.stream.audit(widget.throttleDuration).listen(_trackerState!.onScroll);
   }
 
   @override
@@ -112,8 +110,7 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
     bool isScrollDirection = _scrollDirection == scrollDirection;
     // print('scrollDirection:${notification.metrics}');
     //when user is not scrolling
-    if (notification is UserScrollNotification &&
-        notification.direction == ScrollDirection.idle) {
+    if (notification is UserScrollNotification && notification.direction == ScrollDirection.idle) {
       //Keeps only the last number contexts provided by user. This prevents overcalculation
       //by iterating over non visible widget contexts in scroll listener
       // _inViewState!.removeContexts(widget.contextCacheCount);
@@ -138,7 +135,7 @@ class _TrackerScrollWidgetState extends State<TrackerScrollWidget> {
   @override
   Widget build(BuildContext context) {
     ScrollView child = widget.child;
-    _parentState = TrackerInheritedWidget.of(context);
+    _parentState = TrackerInheritedWidget.maybeOf(context);
     if (_parentState != null) {
       assert(widget.id != null, 'id can not null');
       WidgetContextData item = WidgetContextData(

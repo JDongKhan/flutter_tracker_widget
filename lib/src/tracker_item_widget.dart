@@ -50,7 +50,7 @@ class _TrackerItemWidgetState extends State<TrackerItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _state = TrackerInheritedWidget.of(context)!;
+    _state = TrackerInheritedWidget.maybeOf(context)!;
     WidgetContextData item = WidgetContextData(
       context: context,
       state: this,

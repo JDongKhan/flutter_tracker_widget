@@ -8,10 +8,8 @@ class TrackerInheritedWidget extends InheritedWidget {
   final Widget child;
 
   ///获取TrackerState，便于你获取里面的数据
-  static TrackerState? of(BuildContext context) {
-    final Widget? widget = context
-        .getElementForInheritedWidgetOfExactType<TrackerInheritedWidget>()
-        ?.widget;
+  static TrackerState? maybeOf(BuildContext context) {
+    final Widget? widget = context.getElementForInheritedWidgetOfExactType<TrackerInheritedWidget>()?.widget;
     if (widget != null) {
       TrackerInheritedWidget inheritedWidget = widget as TrackerInheritedWidget;
       return inheritedWidget.inViewState;
@@ -21,25 +19,23 @@ class TrackerInheritedWidget extends InheritedWidget {
 
   ///获取TrackerState，便于你获取里面的数据
   static TrackerState? root(BuildContext context) {
-    final TrackerInheritedWidget? widget =
-        context.findAncestorWidgetOfExactType<TrackerInheritedWidget>();
+    final TrackerInheritedWidget? widget = context.findAncestorWidgetOfExactType<TrackerInheritedWidget>();
     return widget?.inViewState;
   }
 
   //获取可见的context数组
   static List<BuildContext?>? visibleContexts(BuildContext context) {
-    TrackerState? state = TrackerInheritedWidget.of(context);
+    TrackerState? state = TrackerInheritedWidget.maybeOf(context);
     return state?.visibleContexts;
   }
 
   ///获取可见的index数组
   static List<String?>? visibleIndexs(BuildContext context) {
-    TrackerState? state = TrackerInheritedWidget.of(context);
+    TrackerState? state = TrackerInheritedWidget.maybeOf(context);
     return state?.visibleIndexs;
   }
 
-  TrackerInheritedWidget({Key? key, this.inViewState, required this.child})
-      : super(key: key, child: child);
+  TrackerInheritedWidget({Key? key, this.inViewState, required this.child}) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(TrackerInheritedWidget oldWidget) => false;
